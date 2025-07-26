@@ -1,0 +1,70 @@
+{
+  "name": "Notepad-Expert",
+  "version": "1.0.0",
+  "description": "AI-powered Meeting Assistant that provides real-time answers during meetings",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron-builder",
+    "build-mac": "electron-builder --mac",
+    "build-win": "electron-builder --win",
+    "build-macarm": "electron-builder --mac --arm64",
+    "build-all": "sh ./build-all.sh",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "author": "Tushar Sukla",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/speech": "^7.0.1",
+    "@google-cloud/text-to-speech": "^5.0.1",
+    "axios": "^1.8.4",
+    "node-record-lpcm16": "^0.3.1",
+    "openai": "^4.24.1"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^3.0.1",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.express.notepad",
+    "productName": "Notepad Expert",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icons/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "icon": "assets/icons/icon.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "files": [
+      "**/*",
+      "!gclapi.json"
+    ],
+    "extraResources": [
+      {
+        "from": "gclapi.json",
+        "to": "gclapi.json"
+      }
+    ],
+    "asarUnpack": [
+      "node_modules/@google-cloud/text-to-speech/**/*",
+      "node_modules/@google-cloud/speech/**/*",
+      "node_modules/node-record-lpcm16/**/*"
+    ],
+    "afterSign": "scripts/notarize.js",
+    "publish": null
+  }
+}
